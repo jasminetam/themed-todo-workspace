@@ -41,4 +41,21 @@ The app demonstrates scalable full-stack architecture with:
 ---
 
 ## 🧮 Architecture
+frontend (Next.js) ──────► REST API (Spring Boot)
+▲ │
+│ ▼
+React Query PostgreSQL
+Theming + UI Data Persistence
 
+---
+
+## 🧪 Local Development
+
+```bash
+# 1. Clone repository
+git clone 
+cd themed-todo-workspace
+
+# 2. Start everything
+docker compose up
+```
