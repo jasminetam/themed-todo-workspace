@@ -3,6 +3,11 @@ spring:
     url: jdbc:postgresql://localhost:5432/todoapp
     username: postgres
     password: postgres
+    hikari:
+      connection-timeout: 10000
+  jackson:
+    serialization.WRITE_DATES_AS_TIMESTAMPS: false
+    time-zone: UTC
   jpa:
     open-in-view: false
     hibernate:
@@ -21,7 +26,11 @@ management:
     web:
       exposure:
         include: health,info
-        
+
+logging:
+  level:
+    org.springframework.web: INFO
+
 springdoc:
   api-docs:
     path: /v3/api-docs
