@@ -10,7 +10,7 @@ interface HeaderProps {
 
 export const Header: FC<HeaderProps> = ({ workspaceId }) => {
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: 'var(--nav)' }}>
       <Toolbar>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
           <Typography variant="h6" component="div">
@@ -18,23 +18,17 @@ export const Header: FC<HeaderProps> = ({ workspaceId }) => {
           </Typography>
         </Box>
         <button
-          className="rounded border px-3 py-1"
+          className="rounded-skin bg-primary ml-4 px-3 py-1 text-white"
           onClick={() => {
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const root = document.documentElement;
+            const css = getComputedStyle(root);
+            const isDark = root.getAttribute('data-theme') === 'dark';
             applyThemeNow({
               mode: isDark ? 'light' : 'dark',
-              primaryColor:
-                getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() ||
-                '#3b82f6',
-              accentColor:
-                getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() ||
-                '#22c55e',
-              radius:
-                Number(
-                  getComputedStyle(document.documentElement)
-                    .getPropertyValue('--radius')
-                    .replace('px', ''),
-                ) || 10,
+              primaryColor: css.getPropertyValue('--primary').trim() || '#3b82f6',
+              accentColor: css.getPropertyValue('--accent').trim() || '#22c55e',
+              navColor: css.getPropertyValue('--nav').trim() || '#111827',
+              radius: Number(css.getPropertyValue('--radius').replace('px', '')) || 10,
             });
           }}
         >
