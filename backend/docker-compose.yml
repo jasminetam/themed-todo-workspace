@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16
+    container_name: todo-db
+    environment:
+      POSTGRES_DB: todoapp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d todoapp"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: todo-api
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/todoapp
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+
+      - SPRING_FLYWAY_URL=jdbc:postgresql://db:5432/todoapp
+      - SPRING_FLYWAY_USER=postgres
+      - SPRING_FLYWAY_PASSWORD=postgres
+
+      - JWT_SECRET_BASE64=${JWT_SECRET_BASE64}
+      - JWT_ISSUER=${JWT_ISSUER}
+      - JWT_ACCESS_MINUTES=${JWT_ACCESS_MINUTES:-60}
+
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
