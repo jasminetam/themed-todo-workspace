@@ -27,11 +27,11 @@ public class WorkspaceService {
     }
 
     public Workspace create(CreateWorkspaceRequest.WithOwner req) {
+        UUID ownerId = req.ownerId();
+
         var w = new Workspace();
-        w.setOwnerId(req.ownerId());
+        w.setOwnerId(ownerId);
         w.setName(req.name());
         return repo.save(w);
     }
-
 }
-

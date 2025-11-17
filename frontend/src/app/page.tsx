@@ -1,28 +1,23 @@
-import Link from 'next/link';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import LoginPage from './login/page';
 import { listWorkspaces } from '@/lib/api';
+import { Header } from './w/[id]/header';
+import { WorkspaceListClient } from './w/[id]/workspace-list-client';
 
-export default async function Page() {
-  let workspaces: any[] = [];
-  try {
-    workspaces = await listWorkspaces();
-  } catch {}
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return <LoginPage />;
+  }
+
+  const workspaces = await listWorkspaces();
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Your Workspaces</h2>
-      {workspaces.length === 0 ? (
-        <p className="opacity-70">No workspaces found.</p>
-      ) : (
-        <ul className="space-y-2">
-          {workspaces.map((w: any) => (
-            <li key={w.id}>
-              <Link className="underline" href={`/w/${w.id}`}>
-                {w.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <>
+      <Header />
+      <WorkspaceListClient initial={workspaces} />
+    </>
   );
 }
